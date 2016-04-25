@@ -123,4 +123,4 @@ for row in line_table :
         total_file_size += file_size_int
         file_size_count += 1
 
-helptext = "This is a program that analyzes CSV exports from the Carolina Digital Repository. You must submit a tab-delimited txt file for the program to work. You can either learn about the data in the entire file, or learn about specific items by entering a PID."
+helptext = "This is a program that analyzes CSV exports from the Carolina Digital Repository. You can begin by selecting a file to analyze. You can either learn about the data in the entire file, or learn about specific items by entering a PID."
