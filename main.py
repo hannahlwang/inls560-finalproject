@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from helpers import *
+from menutext import *
 import time
 
 linebreaker = str('-'*50 + '\n')
@@ -8,25 +9,12 @@ linebreaker = str('-'*50 + '\n')
 # First while loop for the quit option
 while True :
     while True : # Second while loop to deal with bad input for main menu
-        user_choice = input(linebreaker + (
-    '''Main Menu:
-1 - Data Summary Statistics
-2 - Enter a PID
-3 - Help
-4 - Quit
-''') + linebreaker + ('Choose an option: '))
+        user_choice = input(linebreaker + main_menu_text + linebreaker + ('Choose an option: '))
         if user_choice == '1' or user_choice == '2' or user_choice == '3' or user_choice == '4':
             break
     if user_choice == '1' :
         while True :
-            user_choice2 = input(linebreaker + ( # If user chooses 1, show second menu
-    '''Data Summary Statistics:
-1 - Object types (Folder, File, Aggregate)
-2 - MIME types
-3 - Maximum file size
-4 - Minimum file size
-5 - Average file size
-''') + linebreaker + ('Choose an option: '))
+            user_choice2 = input(linebreaker + data_summary_text + linebreaker + ('Choose an option: ')) # If user chooses 1, show second menu
             if user_choice2 == '1' or user_choice2 == '2' or user_choice2 == '3' or user_choice2 == '4' or user_choice2 == '5' :
                 break
         if user_choice2 == '1' : # Show object type vizualization
@@ -55,10 +43,7 @@ while True :
         break # Quit
     time.sleep(2) # Wait a little bit, then show return options
     while True:
-        user_choice3 = input(linebreaker + ( # Menu that lets you start over or quit
-'''1 - Return to Main Menu
-2 - Quit
-''') + linebreaker + ('Choose an option: '))
+        user_choice3 = input(linebreaker + return_text + linebreaker + ('Choose an option: ')) # Menu that lets you start over or quit
         if user_choice3 == '1' or user_choice3 == '2' :
             break
     if user_choice3 == '1' :
