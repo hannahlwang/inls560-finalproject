@@ -1,3 +1,5 @@
+# All the menu texts used in main.py
+
 main_menu_text = '''Main Menu:
 1 - Data Summary Statistics
 2 - Enter a PID
