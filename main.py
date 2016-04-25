@@ -1,81 +1,67 @@
-import re
-import csv
+#!/usr/bin/python3
 
-# with open("ArtMFATheses.txt") as f:
-#     lines = f.readlines()
+from helpers import *
+import time
 
-# filename = input("Please enter a file name: ")
+linebreaker = str('-'*50 + '\n')
 
-line_table=[]
-file_table=[]
-
-with open("ArtMFATheses.txt") as csvfile:
-    filereader = csv.reader(csvfile, delimiter='\t')
-    for row in filereader:
-        rowreader = '\t'.join(row)
-        file_table.append(rowreader.split("\t"))
-        if re.search("^File|^Collection|^Folder|^Aggregate",rowreader):
-            rowreader = rowreader.rstrip()
-            line_table.append(rowreader.split("\t"))
-
-# for row in file_table :
-#     first_line = file_table[0]
-#     first_line_tabbed = '\t'.join(first_line)
-
-# print(first_line_tabbed)
-
-# while first_line_tabbed != 'Object Type'+'\t'+'PID'+'\t'+'Title'+'\t'+'Path'+'\t'+'Label'+'\t'+'Depth'+'\t'+'Deleted'+'\t'+'Date Added'+'\t'+'Date Updated'+'\t'+'MIME Type'+'\t'+'Checksum'+'\t'+'File Size (bytes)'+'\t'+'Number of Children' :
-#     print("Please enter a file name: ")
-#     filename = input()
-#     for row in file_table :
-#         first_line = file_table[0]
-#         first_line_tabbed = '\t'.join(first_line)
-
-def makedict(datatypedict, datatype, datatypeindex) :
-    datatypedict = dict()
-    for row in line_table :
-        datatype = row[datatypeindex]
-        if datatype not in datatypedict :
-            datatypedict[datatype] = 1
-        else:
-            datatypedict[datatype] += 1
-    print(datatypedict)
-
-makedict('object_dict', 'object', 0)
-makedict('mimetype_dict', 'mimetype', 9)
-makedict('deleted_dict', 'deleted_state', 6)
-
-# print(line_table)
-
-# object_dict = dict()
-
-# for row in line_table :
-#     object = row[0]
-#     if object not in object_dict :
-#         object_dict[object] = 1
-#     else:
-#         object_dict[object] += 1
-
-# print(object_dict)
-
-# deleted_dict = dict()
-
-# for row in line_table :
-#     deleted_state = row[6]
-#     if deleted_state not in deleted_dict :
-#         deleted_dict[deleted_state] = 1
-#     else:
-#         deleted_dict[deleted_state] += 1
-
-# print(deleted_dict)
-
-# mimetype_dict = dict()
-
-# for row in line_table :
-#     mimetype = row[9]
-#     if mimetype not in mimetype_dict :
-#         mimetype_dict[mimetype] = 1
-#     else:
-#         mimetype_dict[mimetype] += 1
-
-# print(mimetype_dict)
+# First while loop for the quit option
+while True :
+    while True : # Second while loop to deal with bad input for main menu
+        user_choice = input(linebreaker + (
+    '''Main Menu:
+1 - Data Summary Statistics
+2 - Enter a PID
+3 - Help
+4 - Quit
+''') + linebreaker + ('Choose an option: '))
+        if user_choice == '1' or user_choice == '2' or user_choice == '3' or user_choice == '4':
+            break
+    if user_choice == '1' :
+        while True :
+            user_choice2 = input(linebreaker + ( # If user chooses 1, show second menu
+    '''Data Summary Statistics:
+1 - Object types (Folder, File, Aggregate)
+2 - MIME types
+3 - Maximum file size
+4 - Minimum file size
+5 - Average file size
+''') + linebreaker + ('Choose an option: '))
+            if user_choice2 == '1' or user_choice2 == '2' or user_choice2 == '3' or user_choice2 == '4' or user_choice2 == '5' :
+                break
+        if user_choice2 == '1' : # Show object type vizualization
+            object_type_viz()
+        elif user_choice2 == '2' : # Show MIME type vizualization
+            mime_type_viz()
+        elif user_choice2 == '3' : # Calculate and show max file size
+            print(str('-'*50))
+            print('Maximum file size: ' + str(max(file_size_lst)) + ' bytes')
+        elif user_choice2 == '4' : # Calculate and show min file size
+            print(str('-'*50))
+            print('Minimum file size: ' + str(min(file_size_lst)) + ' bytes')
+        elif user_choice2 == '5' : # Calculate and show average file size
+            print(str('-'*50))
+            print('Average file size: approx ' + str(total_file_size//file_size_count) + ' bytes')
+    elif user_choice == '2' : # If user chooses 2, let them enter a PID
+        while True:
+            user_choice2 = input('Enter a PID: ')
+            if user_choice2 in csvdict : # Has to be in the PID dictionary in order to continue
+                break
+        print(str('-'*50))
+        print(str(csvdictviz(user_choice2))) # Show 'visualization' of PID data
+    elif user_choice == '3' :
+        print(helptext) # Show help text
+    elif user_choice == '4' :
+        break # Quit
+    time.sleep(2) # Wait a little bit, then show return options
+    while True:
+        user_choice3 = input(linebreaker + ( # Menu that lets you start over or quit
+'''1 - Return to Main Menu
+2 - Quit
+''') + linebreaker + ('Choose an option: '))
+        if user_choice3 == '1' or user_choice3 == '2' :
+            break
+    if user_choice3 == '1' :
+        continue
+    elif user_choice3 == '2' :
+        break
