@@ -2,32 +2,46 @@ import re
 import csv
 
 line_table=[]
-# file_table=[]
+file_table=[]
 
 # This is the first menu that appears, in order to determine which file will be chosen
 while True:
-    filechoice = input(str('-'*50 + '\n') + (
+    while True:
+        while True:
+            filechoice = input(str('-'*50 + '\n') + (
 '''File Menu:
 1 - ArtMFATheses.txt
 2 - SILSMastersPapers.txt
 3 - UNCScholPub.txt
+4 - I brought my own data
 ''') + str('-'*50 + '\n') + ('Choose a file: '))
-    if filechoice == '1' or filechoice == '2' or filechoice == '3' :
+            if filechoice == '1' or filechoice == '2' or filechoice == '3' or filechoice == '4':
+                break
+        if filechoice == '1' :
+            filename = 'ArtMFATheses.txt'
+            break
+        elif filechoice == '2' :
+            filename = 'SILSMastersPapers.txt'
+            break
+        elif filechoice == '3' :
+            filename = 'UNCScholPub.txt'
+            break
+        elif filechoice == '4' :
+            filename = input('** Files must be data exports from the CDR, in the format of tab separated txt files. **' + '\n' + 'Enter your filename here: ')
+            if re.search('\.(txt)', filename) :
+                break
+    
+    with open(filename) as csvfile:
+        filereader = csv.reader(csvfile, delimiter='\t') # Read the CSV file, using the tabs as delimiters
+        for row in filereader:
+            rowreader = '\t'.join(row) # Create a string that can be searched by regex
+            file_table.append(rowreader.split("\t"))
+            if re.search("^File|^Collection|^Folder|^Aggregate",rowreader): # Look for lines that start with one of these object types -> rules out bad data
+                rowreader = rowreader.rstrip()
+                line_table.append(rowreader.split("\t")) # Make a table out of these lines
+    # Check the first line of the file to ensure that it is the right kind of data file
+    if file_table[0] == ['Object Type', 'PID', 'Title', 'Path', 'Label', 'Depth', 'Deleted', 'Date Added', 'Date Updated', 'MIME Type', 'Checksum', 'File Size (bytes)', 'Number of Children'] :
         break
-if filechoice == '1' :
-    filename = 'ArtMFATheses.txt'
-elif filechoice == '2' :
-    filename = 'SILSMastersPapers.txt'
-elif filechoice == '3' :
-    filename = 'UNCScholPub.txt'
-
-with open(filename) as csvfile:
-    filereader = csv.reader(csvfile, delimiter='\t') # Read the CSV file, using the tabs as delimiters
-    for row in filereader:
-        rowreader = '\t'.join(row) # Create a string that can be searched by regex
-        if re.search("^File|^Collection|^Folder|^Aggregate",rowreader): # Look for lines that start with one of these object types -> rules out bad data
-            rowreader = rowreader.rstrip()
-            line_table.append(rowreader.split("\t")) # Make a table out of these lines
 
 # Create a dictionary that returns all the values that correspond to each PID (a dictionary of dictionaries)
 csvdict = dict()
@@ -106,7 +120,7 @@ def mime_type_viz() :
             print(str(mime_type_abbrev_str) + ' = ' + str(mime_type) + ' (' + str(mime_type_dict[mime_type]) + ' objects)')
         elif mime_type == '' :
             mime_type_abbrev_str = 'N/A'
-            print(str(mime_type_abbrev_str) + ' = ' + str(mime_type) + ' (' + str(mime_type_dict[mime_type]) + ' objects)')
+            print(str(mime_type_abbrev_str) + ' = ' + 'MIME type not specified' + ' (' + str(mime_type_dict[mime_type]) + ' objects)')
         elif mime_type == '$mimeResolver.getContentTypeFor($file.name)' :
             mime_type_abbrev_str = '$mi'
             print(str(mime_type_abbrev_str) + ' = ' + str(mime_type) + ' (' + str(mime_type_dict[mime_type]) + ' objects)')
@@ -122,5 +136,3 @@ for row in line_table :
         file_size_lst.append(file_size_int)
         total_file_size += file_size_int
         file_size_count += 1
-
-helptext = "This is a program that analyzes CSV exports from the Carolina Digital Repository. You can begin by selecting a file to analyze. You can either learn about the data in the entire file, or learn about specific items by entering a PID."
