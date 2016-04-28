@@ -19,4 +19,4 @@ return_text = '''1 - Return to Main Menu
 2 - Quit
 '''
 
-helptext = "This is a program that analyzes CSV exports from the Carolina Digital Repository. You can either learn about the data in the entire file, or learn about specific items by entering a PID."
+helptext = "This is a program that analyzes data exports from the Carolina Digital Repository. You can either learn about the data in the entire file, or learn about specific items by entering a PID."
